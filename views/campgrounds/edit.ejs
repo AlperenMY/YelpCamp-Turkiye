@@ -1,23 +1,69 @@
 <% layout("layouts/boilerplate") %>
-<form action="/campgrounds/<%= campground._id %>?_method=PUT" method="post">
-  <div>
-    <label for="title">Title</label>
-    <input
-      type="text"
-      id="title"
-      name="campground[title]"
-      value="<%= campground.title %>"
-    />
+<div class="row">
+  <div class="col-6 offset-3">
+    <h1 class="text-center">Edit Campground</h1>
+    <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="post">
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input
+          class="form-control"
+          type="text"
+          id="title"
+          name="campground[title]"
+          value="<%= campground.title %>"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="location">Location</label>
+        <input
+          class="form-control"
+          type="text"
+          id="location"
+          name="campground[location]"
+          value="<%= campground.location %>"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="image">Image URL</label>
+        <input
+          class="form-control"
+          type="text"
+          id="image"
+          name="campground[image]"
+          value="<%= campground.image %>"
+        />
+      </div>
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea
+          class="form-control"
+          id="description"
+          rows="3"
+          name="campground[description]"
+        >
+<%= campground.description %></textarea
+        >
+      </div>
+      <div class="mb-3">
+        <label for="price" class="form-label">Price</label>
+        <div class="input-group">
+          <span class="input-group-text" id="price-label">₺</span>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="0.00"
+            aria-label="price"
+            aria-describedby="price-label"
+            id="price"
+            name="campground[price]"
+            value="<%= campground.price %>"
+          />
+        </div>
+      </div>
+      <div class="mb-3">
+        <button class="btn btn-info">Save Campground</button>
+      </div>
+    </form>
+    <a href="/campgrounds/<%= campground._id %>">Cancel</a>
   </div>
-  <div>
-    <label for="location">Location</label>
-    <input
-      type="text"
-      id="location"
-      name="campground[location]"
-      value="<%= campground.location %>"
-    />
-  </div>
-  <button>Save</button>
-</form>
-<a href="/campgrounds/<%= campground._id %>">Cancel</a>
+</div>
