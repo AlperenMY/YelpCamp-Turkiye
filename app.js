@@ -6,6 +6,7 @@ const ejsMate = require("ejs-mate");
 
 const { Campground } = require("./models/campground");
 const { catchAsync } = require("./utils/catchAsync");
+const { AppError } = require("./utils/AppError");
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.get(
 app.post(
   "/campgrounds",
   catchAsync(async (req, res, next) => {
+    if (!req.body.campground) throw new AppError("Invalid campground", 400);
     const campground = new Campground(req.body.campground);
     await campground.save();
     res.redirect(`/campgrounds/${campground._id}`);
@@ -85,8 +87,13 @@ app.get(
   })
 );
 
+app.all("*", (req, res, next) => {
+  next(new AppError("Page not found", 404));
+});
+
 app.use((err, req, res, next) => {
-  res.send("Something went wrong!");
+  const { message = "Something went wrong!", statusCode = 500 } = err;
+  res.status(statusCode).send(message);
 });
 
 app.listen(3000, () => {
