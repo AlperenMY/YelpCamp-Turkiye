@@ -2,7 +2,12 @@
 <div class="row">
   <div class="col-6 offset-3">
     <h1 class="text-center">New Campground</h1>
-    <form action="/campgrounds" method="post">
+    <form
+      action="/campgrounds"
+      method="post"
+      class="needs-validation"
+      novalidate
+    >
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
         <input
@@ -10,7 +15,11 @@
           type="text"
           id="title"
           name="campground[title]"
+          required
         />
+        <div class="invalid-feedback">
+          Please provide a title for campground
+        </div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="location">Location</label>
@@ -19,7 +28,11 @@
           type="text"
           id="location"
           name="campground[location]"
+          required
         />
+        <div class="invalid-feedback">
+          Please provide a location for campground
+        </div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="image">Image URL</label>
@@ -28,7 +41,11 @@
           type="text"
           id="image"
           name="campground[image]"
+          required
         />
+        <div class="invalid-feedback">
+          Please provide an image URL for campground
+        </div>
       </div>
       <div class="mb-3">
         <label for="description" class="form-label">Description</label>
@@ -37,11 +54,15 @@
           id="description"
           rows="3"
           name="campground[description]"
+          required
         ></textarea>
+        <div class="invalid-feedback">
+          Please provide a description for campground
+        </div>
       </div>
       <div class="mb-3">
         <label for="price" class="form-label">Price</label>
-        <div class="input-group">
+        <div class="input-group has-validation">
           <span class="input-group-text" id="price-label">₺</span>
           <input
             type="text"
@@ -51,7 +72,11 @@
             aria-describedby="price-label"
             id="price"
             name="campground[price]"
+            required
           />
+          <div class="invalid-feedback">
+            Please provide a nightly price for campground
+          </div>
         </div>
       </div>
       <div class="mb-3">

@@ -2,7 +2,12 @@
 <div class="row">
   <div class="col-6 offset-3">
     <h1 class="text-center">Edit Campground</h1>
-    <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="post">
+    <form
+      action="/campgrounds/<%= campground._id %>?_method=PUT"
+      method="post"
+      class="needs-validation"
+      novalidate
+    >
       <div class="mb-3">
         <label for="title" class="form-label">Title</label>
         <input
@@ -11,7 +16,11 @@
           id="title"
           name="campground[title]"
           value="<%= campground.title %>"
+          required
         />
+        <div class="invalid-feedback">
+          Please provide a title for campground
+        </div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="location">Location</label>
@@ -21,7 +30,11 @@
           id="location"
           name="campground[location]"
           value="<%= campground.location %>"
+          required
         />
+        <div class="invalid-feedback">
+          Please provide a location for campground
+        </div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="image">Image URL</label>
@@ -31,7 +44,11 @@
           id="image"
           name="campground[image]"
           value="<%= campground.image %>"
+          required
         />
+        <div class="invalid-feedback">
+          Please provide an image URL for campground
+        </div>
       </div>
       <div class="mb-3">
         <label for="description" class="form-label">Description</label>
@@ -40,9 +57,13 @@
           id="description"
           rows="3"
           name="campground[description]"
+          required
         >
 <%= campground.description %></textarea
         >
+        <div class="invalid-feedback">
+          Please provide a description for campground
+        </div>
       </div>
       <div class="mb-3">
         <label for="price" class="form-label">Price</label>
@@ -57,7 +78,11 @@
             id="price"
             name="campground[price]"
             value="<%= campground.price %>"
+            required
           />
+          <div class="invalid-feedback">
+            Please provide a nightly price for campground
+          </div>
         </div>
       </div>
       <div class="mb-3">
