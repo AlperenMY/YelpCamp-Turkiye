@@ -8,12 +8,22 @@ const { Campground } = require("./models/campground");
 const { Review } = require("./models/review");
 const { catchAsync } = require("./utils/catchAsync");
 const { AppError } = require("./utils/AppError");
-const { joiCampgroundSchema } = require("./joiSchemas");
+const { joiCampgroundSchema, joiReviewSchema } = require("./joiSchemas");
 
 const app = express();
 
 const validateCampground = (req, res, next) => {
   const { error } = joiCampgroundSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(",");
+    throw new AppError(msg, 400);
+  } else {
+    next();
+  }
+};
+
+const validateReview = (req, res, next) => {
+  const { error } = joiReviewSchema.validate(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
     throw new AppError(msg, 400);
@@ -103,6 +113,7 @@ app.get(
 
 app.post(
   "/campgrounds/:id/reviews",
+  validateReview,
   catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     const review = new Review(req.body.review);
