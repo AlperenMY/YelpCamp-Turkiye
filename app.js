@@ -12,18 +12,16 @@ const { joiCampgroundSchema, joiReviewSchema } = require("./joiSchemas");
 
 const app = express();
 
-const validateCampground = (req, res, next) => {
-  const { error } = joiCampgroundSchema.validate(req.body);
-  if (error) {
-    const msg = error.details.map((el) => el.message).join(",");
-    throw new AppError(msg, 400);
+const validateInput = (req, res, next) => {
+  let result;
+  if (req.body.campground) {
+    result = joiCampgroundSchema.validate(req.body);
+  } else if (req.body.review) {
+    result = joiReviewSchema.validate(req.body);
   } else {
-    next();
+    throw new AppError("Bad request!Please provide required info!", 400);
   }
-};
-
-const validateReview = (req, res, next) => {
-  const { error } = joiReviewSchema.validate(req.body);
+  const { error } = result;
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
     throw new AppError(msg, 400);
@@ -63,7 +61,7 @@ app.get(
 
 app.post(
   "/campgrounds",
-  validateCampground,
+  validateInput,
   catchAsync(async (req, res, next) => {
     // if (!req.body.campground) throw new AppError("Invalid campground", 400);
     const campground = new Campground(req.body.campground);
@@ -113,7 +111,7 @@ app.get(
 
 app.post(
   "/campgrounds/:id/reviews",
-  validateReview,
+  validateInput,
   catchAsync(async (req, res) => {
     const campground = await Campground.findById(req.params.id);
     const review = new Review(req.body.review);
