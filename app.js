@@ -84,7 +84,7 @@ app.get(
 
 app.put(
   "/campgrounds/:id",
-  validateCampground,
+  validateInput,
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     await Campground.findByIdAndUpdate(id, req.body.campground);
