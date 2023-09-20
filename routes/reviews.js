@@ -16,6 +16,7 @@ reviewsRouter.post(
     campground.reviews.push(review);
     await campground.save();
     await review.save();
+    req.flash("success", "New review added");
     res.redirect(`/campgrounds/${campground._id}`);
   })
 );
