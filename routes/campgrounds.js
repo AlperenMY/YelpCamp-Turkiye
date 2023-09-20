@@ -21,6 +21,7 @@ campgroundsRouter.post(
     // if (!req.body.campground) throw new AppError("Invalid campground", 400);
     const campground = new Campground(req.body.campground);
     await campground.save();
+    req.flash("success", "Successfully created the campground!");
     res.redirect(`/campgrounds/${campground._id}`);
   })
 );

@@ -11,6 +11,7 @@
   "repository": "github:AlperenMY/YelpCamp-Turkiye",
   "dependencies": {
     "axios": "^1.5.0",
+    "connect-flash": "^0.1.1",
     "country-state-city": "^3.2.0",
     "ejs": "^3.1.9",
     "ejs-mate": "^4.0.0",
