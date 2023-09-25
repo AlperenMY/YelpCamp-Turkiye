@@ -5,10 +5,12 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
 const flash = require("connect-flash");
+const passport = require("passport");
 
 const { AppError } = require("./utils/AppError");
 const { reviewsRouter } = require("./routes/reviews");
 const { campgroundsRouter } = require("./routes/campgrounds");
+const { User } = require("./models/user");
 
 const app = express();
 const sessionConfig = {
@@ -42,6 +44,12 @@ app.use(methodOverride("_method"));
 app.use(session(sessionConfig));
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
@@ -50,6 +58,12 @@ app.use((req, res, next) => {
 
 app.use("/campgrounds", campgroundsRouter);
 app.use("/campgrounds/:id/reviews", reviewsRouter);
+
+app.get("/fakeuser", async (req, res) => {
+  const newUser = new User({ username: "merve", email: "hmy@amy.com" });
+  const user = await User.register(newUser, "deneme");
+  res.send(user);
+});
 
 app.get("/", (req, res) => {
   res.render("home");
