@@ -1,4 +1,5 @@
 const express = require("express");
+const passport = require("passport");
 
 const { User } = require("../models/user");
 const { catchAsync } = require("../utils/catchAsync");
@@ -24,6 +25,22 @@ authRouter.post(
       res.redirect(req.url);
     }
   })
+);
+
+authRouter.get("/login", (req, res) => {
+  res.render("auth/login", { title: "Login" });
+});
+
+authRouter.post(
+  "/login",
+  passport.authenticate("local", {
+    failureFlash: true,
+    failureRedirect: "/login",
+  }),
+  (req, res) => {
+    req.flash("success", `Welcome, ${req.body.username}`);
+    res.redirect("/campgrounds");
+  }
 );
 
 exports.authRouter = authRouter;
