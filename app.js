@@ -10,6 +10,7 @@ const passport = require("passport");
 const { AppError } = require("./utils/AppError");
 const { reviewsRouter } = require("./routes/reviews");
 const { campgroundsRouter } = require("./routes/campgrounds");
+const { authRouter } = require("./routes/auth");
 const { User } = require("./models/user");
 
 const app = express();
@@ -58,6 +59,7 @@ app.use((req, res, next) => {
 
 app.use("/campgrounds", campgroundsRouter);
 app.use("/campgrounds/:id/reviews", reviewsRouter);
+app.use("/", authRouter);
 
 app.get("/fakeuser", async (req, res) => {
   const newUser = new User({ username: "merve", email: "hmy@amy.com" });
