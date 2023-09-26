@@ -1,7 +1,7 @@
 const { joiCampgroundSchema, joiReviewSchema } = require("../joiSchemas");
 const { AppError } = require("./AppError");
 
-const validateInput = (req, res, next) => {
+exports.validateInput = (req, res, next) => {
   let result;
   if (req.body.campground) {
     result = joiCampgroundSchema.validate(req.body);
@@ -19,4 +19,17 @@ const validateInput = (req, res, next) => {
   }
 };
 
-exports.validateInput = validateInput;
+exports.isLoggedIn = (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    req.flash("error", "You should log in first");
+    return res.redirect("/login");
+  }
+  next();
+};
+
+exports.storeReturnTo = (req, res, next) => {
+  if (req.session.returnTo) {
+    res.locals.returnTo = req.session.returnTo;
+  }
+  next();
+};

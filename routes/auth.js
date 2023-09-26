@@ -3,7 +3,7 @@ const passport = require("passport");
 
 const { User } = require("../models/user");
 const { catchAsync } = require("../utils/catchAsync");
-const { storeReturnTo } = require("../utils/storeReturnTo");
+const { storeReturnTo } = require("../utils/middleware");
 
 const authRouter = express.Router();
 
