@@ -43,4 +43,12 @@ authRouter.post(
   }
 );
 
+authRouter.post("/logout", (req, res, next) => {
+  req.logOut((err) => {
+    if (err) return next(err);
+    req.flash("success", "Logout successfully");
+    res.redirect("/campgrounds");
+  });
+});
+
 exports.authRouter = authRouter;
