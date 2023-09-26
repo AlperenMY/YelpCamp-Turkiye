@@ -3,6 +3,7 @@ const express = require("express");
 const { Campground } = require("../models/campground");
 const { catchAsync } = require("../utils/catchAsync");
 const { validateInput } = require("../utils/validateInput");
+const { isLoggedIn } = require("../utils/isLoggedIn");
 
 const campgroundsRouter = express.Router();
 
@@ -16,6 +17,7 @@ campgroundsRouter.get(
 
 campgroundsRouter.post(
   "/",
+  isLoggedIn,
   validateInput,
   catchAsync(async (req, res, next) => {
     const campground = new Campground(req.body.campground);
@@ -28,7 +30,7 @@ campgroundsRouter.post(
   })
 );
 
-campgroundsRouter.get("/new", (req, res) => {
+campgroundsRouter.get("/new", isLoggedIn, (req, res) => {
   res.render("campgrounds/new", { title: "New Campground" });
 });
 
@@ -48,6 +50,7 @@ campgroundsRouter.get(
 
 campgroundsRouter.put(
   "/:id",
+  isLoggedIn,
   validateInput,
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
@@ -59,6 +62,7 @@ campgroundsRouter.put(
 
 campgroundsRouter.delete(
   "/:id",
+  isLoggedIn,
   catchAsync(async (req, res, next) => {
     const { id } = req.params;
     await Campground.findByIdAndDelete(id);
@@ -69,6 +73,7 @@ campgroundsRouter.delete(
 
 campgroundsRouter.get(
   "/:id/edit",
+  isLoggedIn,
   catchAsync(async (req, res, next) => {
     const campground = await Campground.findById(req.params.id);
     if (!campground) {
