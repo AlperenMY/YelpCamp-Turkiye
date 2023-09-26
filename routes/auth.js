@@ -12,14 +12,16 @@ authRouter.get("/register", (req, res) => {
 
 authRouter.post(
   "/register",
-  catchAsync(async (req, res) => {
+  catchAsync(async (req, res, next) => {
     try {
       const { username, email, password } = req.body;
       const user = new User({ username, email });
       const newUser = await User.register(user, password);
-      console.log(newUser);
-      req.flash("success", `Hey ${username} Welcome to Yelp-Camp Türkiye`);
-      res.redirect("/campgrounds");
+      req.login(newUser, (err) => {
+        if (err) return next(err);
+        req.flash("success", `Hey ${username} Welcome to Yelp-Camp Türkiye`);
+        res.redirect("/campgrounds");
+      });
     } catch (error) {
       req.flash("error", error.message);
       res.redirect(req.url);
