@@ -33,6 +33,7 @@ const seedDB = async () => {
     const randPrice = Math.floor(Math.random() * 2000) / 100 + 10; //multiply&dividing 100 for 2 decimals
     const title = `${randMemOfArray(descriptors)} ${randMemOfArray(places)}`;
     const image = await randomImage(title);
+    const author = "650dd21807ac94b6250beb70";
     const newCamp = new Campground({
       location: `${towns[randTown].name}, ${
         State.getStateByCodeAndCountry(randCityCode, "TR").name
@@ -42,6 +43,7 @@ const seedDB = async () => {
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni at cumque modi vel qui repellendus earum facilis velit deserunt? Consectetur aut atque consequatur corrupti commodi possimus a dicta nesciunt voluptatibus?",
       price: randPrice,
+      author,
     });
     await newCamp.save();
   }
