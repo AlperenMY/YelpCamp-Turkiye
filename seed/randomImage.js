@@ -6,7 +6,7 @@ const randomImage = async (query) => {
   try {
     const id = getUnsplashID();
     const config = {
-      params: { query, client_id: id },
+      params: { query, orientation: "landscape", client_id: id },
       headers: {
         "Accept-Version": "v1",
       },
