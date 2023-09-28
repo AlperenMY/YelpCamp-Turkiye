@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { State, City } = require("country-state-city");
 
 const { Campground } = require("../models/campground");
+const { Review } = require("../models/review");
 const { descriptors, places } = require("./seedHelpers");
 const { randomImage } = require("./randomImage");
 
@@ -20,6 +21,7 @@ const randMemOfArray = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const seedDB = async () => {
   await Campground.deleteMany({});
+  await Review.deleteMany({});
   for (let i = 0; i < 50; i++) {
     const randCity = Math.floor(Math.random() * cities.length);
     let randCityCode = "";
