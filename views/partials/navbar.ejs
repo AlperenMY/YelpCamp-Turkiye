@@ -23,6 +23,7 @@
         <a href="/login" class="nav-link">Login</a>
         <a href="/register" class="nav-link">Signin</a>
         <% } else { %>
+        <span class="navbar-text"> <%= currentUser.username %> </span>
         <form action="/logout" method="post">
           <button class="btn nav-link">Logout</button>
         </form>
