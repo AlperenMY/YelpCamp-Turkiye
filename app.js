@@ -55,7 +55,7 @@ app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   res.locals.currentUser = req.user;
-  if (!["/login", "/"].includes(req.originalUrl)) {
+  if (!["/login", "/"].includes(req.originalUrl) && req.method === "GET") {
     req.session.returnTo = req.originalUrl;
   }
   next();
