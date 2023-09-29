@@ -7,21 +7,22 @@ const authController = require("../controllers/auth");
 
 const authRouter = express.Router();
 
-authRouter.get("/register", authController.renderRegisterForm);
+authRouter
+  .route("/register")
+  .get(authController.renderRegisterForm)
+  .post(catchAsync(authController.register));
 
-authRouter.post("/register", catchAsync(authController.register));
-
-authRouter.get("/login", authController.renderLoginForm);
-
-authRouter.post(
-  "/login",
-  storeReturnTo,
-  passport.authenticate("local", {
-    failureFlash: true,
-    failureRedirect: "/login",
-  }),
-  authController.login
-);
+authRouter
+  .route("/login")
+  .get(authController.renderLoginForm)
+  .post(
+    storeReturnTo,
+    passport.authenticate("local", {
+      failureFlash: true,
+      failureRedirect: "/login",
+    }),
+    authController.login
+  );
 
 authRouter.post("/logout", authController.logout);
 
