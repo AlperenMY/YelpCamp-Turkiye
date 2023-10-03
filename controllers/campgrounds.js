@@ -8,6 +8,10 @@ exports.index = async (req, res, next) => {
 exports.createCampground = async (req, res, next) => {
   const campground = new Campground(req.body.campground);
   campground.author = req.user._id;
+  campground.images = req.files.map((obj) => ({
+    url: obj.path,
+    filename: obj.filename,
+  }));
   await campground.save();
   req.flash(
     "success",

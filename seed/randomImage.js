@@ -1,12 +1,13 @@
 const axios = require("axios");
 
-const { getUnsplashID } = require("./unsplashID"); //Make a function that get your unsplash client id
-
 const randomImage = async (query) => {
   try {
-    const id = getUnsplashID();
     const config = {
-      params: { query, orientation: "landscape", client_id: id },
+      params: {
+        query,
+        orientation: "landscape",
+        client_id: process.env.UNSPLASH_ACCESS_KEY,
+      },
       headers: {
         "Accept-Version": "v1",
       },
@@ -21,7 +22,7 @@ const randomImage = async (query) => {
       throw new Error("No thumb image");
     }
   } catch (error) {
-    console.log("API error", error);
+    console.log("API error", error.response.data.errors);
   }
 };
 
