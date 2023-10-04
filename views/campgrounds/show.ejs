@@ -104,6 +104,7 @@
       method="post"
       class="mb-3 needs-validation"
       novalidate
+      enctype="multipart/form-data"
     >
       <div>
         <fieldset class="starability-grow">
@@ -166,6 +167,10 @@
         <div class="invalid-feedback">
           Please provide a review for campground
         </div>
+      </div>
+      <div class="mb-3">
+        <label for="upload" class="form-label">Attach Photos</label>
+        <input type="file" name="image" id="upload" multiple />
       </div>
       <button class="btn btn-success">Add Review</button>
     </form>

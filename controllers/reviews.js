@@ -6,6 +6,11 @@ exports.createReview = async (req, res) => {
   const review = new Review(req.body.review);
   review.author = req.user._id;
   campground.reviews.push(review);
+  const imgs = req.files.map((obj) => ({
+    url: obj.path,
+    filename: obj.filename,
+  }));
+  campground.images.push(...imgs);
   await campground.save();
   await review.save();
   req.flash("success", "New review added");
