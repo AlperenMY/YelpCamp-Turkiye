@@ -13,6 +13,7 @@ const storage = new CloudinaryStorage({
   params: {
     folder: "YelpCamp_Turkiye",
     allowed_formats: ["png", "jpeg", "jpg"],
+    transformation: [{ width: 400, height: 300, crop: "fill" }],
   },
 });
 
