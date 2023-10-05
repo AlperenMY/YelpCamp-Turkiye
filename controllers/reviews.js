@@ -6,6 +6,10 @@ exports.createReview = async (req, res) => {
   const review = new Review(req.body.review);
   review.author = req.user._id;
   campground.reviews.push(review);
+  if (req.files.length > 3) {
+    req.flash("error", "You cannot upload more than 3 photos");
+    return res.redirect(`/campgrounds/${campground._id}`);
+  }
   const imgs = req.files.map((obj) => ({
     url: obj.path,
     filename: obj.filename,

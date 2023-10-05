@@ -169,14 +169,16 @@
         </div>
       </div>
       <div class="mb-3">
-        <label for="imageUpload" class="form-label">Upload Images (Opt)</label>
+        <label for="imageUploadEdit" class="form-label">Upload Images (Opt)</label>
         <input
           class="form-control"
           type="file"
-          id="imageUpload"
+          id="imageUploadEdit"
           name="image"
+          accept="image/*"
           multiple
         />
+        <div class="invalid-feedback">You should upload max 3 photos</div>
       </div>
       <button class="btn btn-success">Add Review</button>
     </form>

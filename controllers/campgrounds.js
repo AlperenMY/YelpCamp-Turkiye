@@ -8,6 +8,10 @@ exports.index = async (req, res, next) => {
 exports.createCampground = async (req, res, next) => {
   const campground = new Campground(req.body.campground);
   campground.author = req.user._id;
+  if(req.files.length > 3){
+    req.flash("error", "You cannot upload more than 3 photos");
+    return res.redirect("/campgrounds/new");
+  }
   campground.images = req.files.map((obj) => ({
     url: obj.path,
     filename: obj.filename,
