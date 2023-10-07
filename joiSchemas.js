@@ -8,6 +8,7 @@ exports.joiCampgroundSchema = Joi.object({
     location: Joi.string().required(),
     // image: Joi.string().required(),
   }).required(),
+  deletedImages: Joi.array(),
 });
 
 exports.joiReviewSchema = Joi.object({

@@ -1,4 +1,5 @@
 const { Campground } = require("../models/campground");
+const { cloudinary } = require("../cloudinary");
 
 exports.index = async (req, res, next) => {
   const campgrounds = await Campground.find({});
@@ -8,7 +9,7 @@ exports.index = async (req, res, next) => {
 exports.createCampground = async (req, res, next) => {
   const campground = new Campground(req.body.campground);
   campground.author = req.user._id;
-  if(req.files.length > 3){
+  if (req.files.length > 3) {
     req.flash("error", "You cannot upload more than 3 photos");
     return res.redirect("/campgrounds/new");
   }
@@ -41,14 +42,28 @@ exports.showCampground = async (req, res, next) => {
 
 exports.updateCampground = async (req, res, next) => {
   const { id } = req.params;
-  await Campground.findByIdAndUpdate(id, req.body.campground);
+  const campground = await Campground.findByIdAndUpdate(
+    id,
+    req.body.campground
+  );
+  if (req.body.deletedImages) {
+    await campground.updateOne({
+      $pull: { images: { filename: { $in: req.body.deletedImages } } },
+    });
+    for (const filename of req.body.deletedImages) {
+      await cloudinary.uploader.destroy(filename);
+    }
+  }
   req.flash("success", "Campground updated");
   res.redirect(`/campgrounds/${id}`);
 };
 
 exports.deleteCampground = async (req, res, next) => {
   const { id } = req.params;
-  await Campground.findByIdAndDelete(id);
+  const deleted = await Campground.findByIdAndDelete(id);
+  for (const image of deleted.images) {
+    await cloudinary.uploader.destroy(image.filename);
+  }
   req.flash("success", "Campground deleted");
   res.redirect("/campgrounds");
 };
