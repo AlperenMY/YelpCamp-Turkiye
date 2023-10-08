@@ -72,25 +72,32 @@
         </div>
       </div>
       <div class="mb-3">
-        <% campground.images.forEach((image, index) => { %>
-        <img
-          src="<%= image.thumbnail %>"
-          alt="campground image"
-          class="img-thumbnail"
-        />
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value="<%= image.filename %>"
-            id="image-<%= index %>"
-            name="deletedImages[]"
-          />
-          <label class="form-check-label" for="image-<%= index %>">
-            Check to Delete
-          </label>
+        <h5>Check to Delete Images</h5>
+        <div class="row row-cols-md-4 mb-3">
+          <% campground.images.forEach((image, index) => { %>
+          <div class="col">
+            <div class="card">
+              <img
+                src="<%= image.thumbnail %>"
+                alt="campground image"
+                class="card-img"
+              />
+              <div class="card-img-overlay text-end pt-1 pe-2">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value="<%= image.filename %>"
+                  id="image-<%= index %>"
+                  name="deletedImages[]"
+                />
+                <label class="visually-hidden" for="image-<%= index %>">
+                  Check to Delete
+                </label>
+              </div>
+            </div>
+          </div>
+          <% }) %>
         </div>
-        <% }) %>
       </div>
       <div class="mb-3">
         <button class="btn btn-info">Save Campground</button>
