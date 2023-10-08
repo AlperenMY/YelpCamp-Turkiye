@@ -2,6 +2,7 @@
 <link rel="stylesheet" href="/css/starability-grow.css" />
 <div class="row">
   <div class="col-6">
+    <div id="map" style="width: 400px; height: 300px"></div>
     <div class="card mb-3">
       <div id="campgroundImageCarousel" class="carousel slide">
         <% if (campground.images.length > 1) { %>
@@ -205,3 +206,7 @@
     <% } %>
   </div>
 </div>
+<script>
+  const mapboxToken = "<%- process.env.MAPBOX_PUBLIC_TOKEN %>";
+</script>
+<script src="/js/showPageMap.js"></script>
