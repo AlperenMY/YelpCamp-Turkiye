@@ -8,6 +8,7 @@ const { Campground } = require("../models/campground");
 const { Review } = require("../models/review");
 const { descriptors, places } = require("./seedHelpers");
 const { randomImage } = require("./randomImage");
+const { cloudinary } = require("../cloudinary");
 
 const cities = State.getStatesOfCountry("TR");
 
@@ -25,7 +26,8 @@ const randMemOfArray = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const seedDB = async () => {
   await Campground.deleteMany({});
   await Review.deleteMany({});
-  for (let i = 0; i < 50; i++) {
+  await cloudinary.api.delete_resources_by_prefix("YelpCamp_Turkiye");
+  for (let i = 0; i < 48; i++) {
     const randCity = Math.floor(Math.random() * cities.length);
     let randCityCode = "";
     if (randCity < 9) {
@@ -38,6 +40,11 @@ const seedDB = async () => {
     const randPrice = Math.floor(Math.random() * 2000) / 100 + 10; //multiply&dividing 100 for 2 decimals
     const title = `${randMemOfArray(descriptors)} ${randMemOfArray(places)}`;
     const imageUrl = await randomImage(title);
+    const cloudinaryRes = await cloudinary.uploader.upload(imageUrl, {
+      folder: "YelpCamp_Turkiye",
+      transformation: [{ width: 400, height: 300, crop: "fill" }],
+      use_filename: true,
+    });
     const author = "650dd21807ac94b6250beb70";
     const newCamp = new Campground({
       location: `${towns[randTown].name}, ${
@@ -49,7 +56,10 @@ const seedDB = async () => {
       price: randPrice,
       author,
     });
-    newCamp.images.push({ url: imageUrl });
+    newCamp.images.push({
+      url: cloudinaryRes.secure_url,
+      filename: cloudinaryRes.public_id,
+    });
     await newCamp.save();
   }
 };
