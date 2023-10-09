@@ -2,7 +2,6 @@
 <link rel="stylesheet" href="/css/starability-grow.css" />
 <div class="row">
   <div class="col-6">
-    <div id="map" style="width: 400px; height: 300px"></div>
     <div class="card mb-3">
       <div id="campgroundImageCarousel" class="carousel slide">
         <% if (campground.images.length > 1) { %>
@@ -106,6 +105,7 @@
     </div>
   </div>
   <div class="col-6">
+    <div id="map" style="height: 300px"></div>
     <% if (currentUser) { %>
     <h2>Leave a review</h2>
     <form
