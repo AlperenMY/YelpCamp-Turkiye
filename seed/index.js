@@ -9,6 +9,7 @@ const { Review } = require("../models/review");
 const { descriptors, places } = require("./seedHelpers");
 const { randomImage } = require("./randomImage");
 const { cloudinary } = require("../cloudinary");
+const { forwardGeocode } = require("../utils/geocodingService");
 
 const cities = State.getStatesOfCountry("TR");
 
@@ -37,24 +38,30 @@ const seedDB = async () => {
     }
     const towns = City.getCitiesOfState("TR", randCityCode);
     const randTown = Math.floor(Math.random() * towns.length);
+    const location = `${towns[randTown].name}, ${
+      State.getStateByCodeAndCountry(randCityCode, "TR").name
+    }`;
     const randPrice = Math.floor(Math.random() * 2000) / 100 + 10; //multiply&dividing 100 for 2 decimals
     const title = `${randMemOfArray(descriptors)} ${randMemOfArray(places)}`;
     const imageUrl = await randomImage(title);
-    const cloudinaryRes = await cloudinary.uploader.upload(imageUrl, {
-      folder: "YelpCamp_Turkiye",
-      transformation: [{ width: 400, height: 300, crop: "fill" }],
-      use_filename: true,
-    });
     const author = "650dd21807ac94b6250beb70";
+    const lon = towns[randTown].longitude;
+    const lat = towns[randTown].latitude;
+    const geometry = { type: "Point", coordinates: [lon, lat] };
     const newCamp = new Campground({
-      location: `${towns[randTown].name}, ${
-        State.getStateByCodeAndCountry(randCityCode, "TR").name
-      }`,
+      location,
       title,
       description:
         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni at cumque modi vel qui repellendus earum facilis velit deserunt? Consectetur aut atque consequatur corrupti commodi possimus a dicta nesciunt voluptatibus?",
       price: randPrice,
       author,
+      defaultImage: imageUrl,
+      geometry,
+    });
+    const cloudinaryRes = await cloudinary.uploader.upload(imageUrl, {
+      folder: "YelpCamp_Turkiye",
+      transformation: [{ width: 400, height: 300, crop: "fill" }],
+      use_filename: true,
     });
     newCamp.images.push({
       url: cloudinaryRes.secure_url,
