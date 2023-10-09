@@ -28,11 +28,19 @@
         <% } %>
         <div class="carousel-inner">
           <div class="carousel-item active">
+            <% if (campground.images.length > 0) { %>
             <img
               src="<%= campground.images[0].url %>"
               class="d-block card-img-top"
               alt="campground image"
             />
+            <% } else { %>
+            <img
+              src="<%= campground.defaultImage %>"
+              alt="campground image"
+              class="d-block card-img-top"
+            />
+            <% } %>
           </div>
           <% for( let index = 1; index < campground.images.length; index++ ) {
           %>

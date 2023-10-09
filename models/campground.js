@@ -18,6 +18,7 @@ const campgroundSchema = new Schema({
   description: String,
   location: String,
   images: [imageSchema],
+  defaultImage: String,
   reviews: [
     {
       type: Schema.Types.ObjectId,

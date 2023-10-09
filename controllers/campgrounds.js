@@ -1,11 +1,6 @@
-const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
-
 const { Campground } = require("../models/campground");
 const { cloudinary } = require("../cloudinary");
-
-const geocodingService = mbxGeocoding({
-  accessToken: process.env.MAPBOX_PUBLIC_TOKEN,
-});
+const { forwardGeocode } = require("../utils/geocodingService");
 
 exports.index = async (req, res, next) => {
   const campgrounds = await Campground.find({});
@@ -13,27 +8,19 @@ exports.index = async (req, res, next) => {
 };
 
 exports.createCampground = async (req, res, next) => {
-  const mapboxRes = await geocodingService
-    .forwardGeocode({
-      query: req.body.campground.location,
-      countries: ["tr"],
-      limit: 1,
-      language: ["tr"],
-    })
-    .send();
   const campground = new Campground(req.body.campground);
   campground.author = req.user._id;
-  if (req.files.length > 3) {
-    req.flash("error", "You cannot upload more than 3 photos");
+  if (!req.files || req.files.length > 3) {
+    req.flash("error", "You should upload min 1 max 3 photos");
     return res.redirect("/campgrounds/new");
   }
   campground.images = req.files.map((obj) => ({
     url: obj.path,
     filename: obj.filename,
   }));
-  campground.geometry = mapboxRes.body.features[0].geometry;
+  campground.defaultImage = campground.images[0].url;
+  campground.geometry = await forwardGeocode(req.body.campground.location);
   await campground.save();
-  console.log(campground);
   req.flash(
     "success",
     `${campground.title} is added successfully to campgrounds`
@@ -58,6 +45,9 @@ exports.showCampground = async (req, res, next) => {
 
 exports.updateCampground = async (req, res, next) => {
   const { id } = req.params;
+  req.body.campground.geometry = await forwardGeocode(
+    req.body.campground.location
+  );
   const campground = await Campground.findByIdAndUpdate(
     id,
     req.body.campground
