@@ -35,13 +35,13 @@ map.on("load", () => {
       "circle-color": [
         "step",
         ["get", "point_count"],
-        "#51bbd6",
-        3,
-        "#f1f075",
-        5,
-        "#f28cb1",
+        "#2196F3",
+        4,
+        "#1565C0",
+        7,
+        "#0D47A1",
       ],
-      "circle-radius": ["step", ["get", "point_count"], 20, 100, 30, 750, 40],
+      "circle-radius": ["step", ["get", "point_count"], 15, 4, 20, 7, 30],
     },
   });
 
@@ -53,7 +53,10 @@ map.on("load", () => {
     layout: {
       "text-field": ["get", "point_count_abbreviated"],
       "text-font": ["DIN Offc Pro Medium", "Arial Unicode MS Bold"],
-      "text-size": 12,
+      "text-size": 11,
+    },
+    paint: {
+      "text-color": ["step", ["get", "point_count"], "#000", 4, "#fff"],
     },
   });
 
@@ -63,10 +66,10 @@ map.on("load", () => {
     source: "campgrounds",
     filter: ["!", ["has", "point_count"]],
     paint: {
-      "circle-color": "#11b4da",
+      "circle-color": "#90CAF9",
       "circle-radius": 4,
-      "circle-stroke-width": 1,
-      "circle-stroke-color": "#fff",
+      "circle-stroke-width": 0.5,
+      "circle-stroke-color": "#000",
     },
   });
 
@@ -94,8 +97,7 @@ map.on("load", () => {
   // description HTML from its properties.
   map.on("click", "unclustered-point", (e) => {
     const coordinates = e.features[0].geometry.coordinates.slice();
-    const title = e.features[0].properties.title;
-    const price = e.features[0].properties.price;
+    const { popupHTML } = e.features[0].properties;
 
     // Ensure that if the map is zoomed out such that
     // multiple copies of the feature are visible, the
@@ -104,10 +106,7 @@ map.on("load", () => {
       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
     }
 
-    new mapboxgl.Popup()
-      .setLngLat(coordinates)
-      .setHTML(`${title}<br>Price: ${price}₺`)
-      .addTo(map);
+    new mapboxgl.Popup().setLngLat(coordinates).setHTML(popupHTML).addTo(map);
   });
 
   map.on("mouseenter", "clusters", () => {
