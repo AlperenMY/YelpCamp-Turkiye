@@ -25,10 +25,12 @@ mongoose
 const randMemOfArray = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const seedDB = async () => {
-  await Campground.deleteMany({});
-  await Review.deleteMany({});
-  await cloudinary.api.delete_resources_by_prefix("YelpCamp_Turkiye");
-  for (let i = 0; i < 48; i++) {
+  if (process.argv[2] === "new") {
+    await Campground.deleteMany({});
+    await Review.deleteMany({});
+    await cloudinary.api.delete_resources_by_prefix("YelpCamp_Turkiye");
+  }
+  for (let i = 0; i < 50; i++) {
     const randCity = Math.floor(Math.random() * cities.length);
     let randCityCode = "";
     if (randCity < 9) {
