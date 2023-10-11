@@ -1,6 +1,6 @@
 <% layout("layouts/boilerplate") %>
 <div class="row">
-  <div class="col-6 offset-3">
+  <div class="col-md-6 offset-md-3">
     <h1 class="text-center">Edit Campground</h1>
     <form
       action="/campgrounds/<%= campground._id %>?_method=PUT"
@@ -75,7 +75,7 @@
         <% if (campground.images.length > 0) { %>
         <h5>Check to Delete Images</h5>
         <% } %>
-        <div class="row row-cols-md-4 mb-3">
+        <div class="row row-cols-xl-4 row-cols-lg-3 row-cols-2 mb-3 g-2">
           <% campground.images.forEach((image, index) => { %>
           <div class="col">
             <div class="card">
