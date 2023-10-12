@@ -9,6 +9,7 @@ const ejsMate = require("ejs-mate");
 const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
+const mongoSanitize = require("express-mongo-sanitize");
 
 const { AppError } = require("./utils/AppError");
 const { reviewsRouter } = require("./routes/reviews");
@@ -53,6 +54,8 @@ app.use(passport.session());
 passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+app.use(mongoSanitize());
 
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
