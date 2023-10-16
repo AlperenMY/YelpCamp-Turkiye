@@ -19,13 +19,15 @@ const { User } = require("./models/user");
 
 const app = express();
 const sessionConfig = {
-  secret: "mylittlesecret",
+  name: "ylpuid",
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
     httpOnly: true,
+    // secure: true,
   },
 };
 
