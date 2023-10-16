@@ -103,8 +103,12 @@
       </div>
       <div class="mb-3">
         <button class="btn btn-info">Save Campground</button>
+        <a
+          class="btn btn-danger float-end"
+          href="/campgrounds/<%= campground._id %>"
+          >Cancel</a
+        >
       </div>
     </form>
-    <a href="/campgrounds/<%= campground._id %>">Cancel</a>
   </div>
 </div>
