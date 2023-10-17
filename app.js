@@ -10,6 +10,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("passport");
 const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
 
 const { AppError } = require("./utils/AppError");
 const { reviewsRouter } = require("./routes/reviews");
@@ -30,6 +31,12 @@ const sessionConfig = {
     // secure: true,
   },
 };
+const scriptSrcUrls = ["https://cdn.jsdelivr.net", "https://api.mapbox.com"];
+const imgSrcUrls = [
+  "https://images.unsplash.com",
+  `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/`,
+];
+const connectSrcUrls = ["https://api.mapbox.com", "https://events.mapbox.com"];
 
 mongoose
   .connect("mongodb://127.0.0.1:27017/yelp-camp")
@@ -58,6 +65,18 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use(mongoSanitize());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        scriptSrc: ["'self'", "'unsafe-inline'", ...scriptSrcUrls],
+        imgSrc: ["self", "data:", ...imgSrcUrls],
+        workerSrc: ["self", "blob:"],
+        connectSrc: ["self", ...connectSrcUrls],
+      },
+    },
+  })
+);
 
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
