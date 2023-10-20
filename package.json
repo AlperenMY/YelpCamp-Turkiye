@@ -9,6 +9,9 @@
   "author": "Alperen M. YILMAZ",
   "license": "MIT",
   "repository": "github:AlperenMY/YelpCamp-Turkiye",
+  "engines": {
+    "node": "18.16.1"
+  },
   "dependencies": {
     "@mapbox/mapbox-sdk": "^0.15.3",
     "axios": "^1.5.0",
