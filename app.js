@@ -11,6 +11,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
+const MongoStore = require("connect-mongo");
 
 const { AppError } = require("./utils/AppError");
 const { reviewsRouter } = require("./routes/reviews");
@@ -19,8 +20,16 @@ const { authRouter } = require("./routes/auth");
 const { User } = require("./models/user");
 
 const app = express();
+const dbUrl = "mongodb://127.0.0.1:27017/yelp-camp"; //process.env.ATLAS_DB_URL
 const sessionConfig = {
   name: "ylpuid",
+  store: MongoStore.create({
+    mongoUrl: dbUrl,
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+      secret: process.env.MONGO_STORE_SECRET,
+    },
+  }),
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
@@ -39,7 +48,7 @@ const imgSrcUrls = [
 const connectSrcUrls = ["https://api.mapbox.com", "https://events.mapbox.com"];
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/yelp-camp")
+  .connect(dbUrl)
   .then(() => {
     console.log("MongoDB connected successfully!");
   })
