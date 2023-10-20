@@ -20,7 +20,7 @@ const { authRouter } = require("./routes/auth");
 const { User } = require("./models/user");
 
 const app = express();
-const dbUrl = "mongodb://127.0.0.1:27017/yelp-camp"; //process.env.ATLAS_DB_URL
+const dbUrl = process.env.ATLAS_DB_URL || "mongodb://127.0.0.1:27017/yelp-camp"; //process.env.ATLAS_DB_URL
 const sessionConfig = {
   name: "ylpuid",
   store: MongoStore.create({
@@ -46,6 +46,7 @@ const imgSrcUrls = [
   `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/`,
 ];
 const connectSrcUrls = ["https://api.mapbox.com", "https://events.mapbox.com"];
+const port = process.env.PORT || 3000;
 
 mongoose
   .connect(dbUrl)
@@ -115,6 +116,6 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("error", { err, title: Error });
 });
 
-app.listen(3000, () => {
-  console.log("LISTENING ON PORT 3000");
+app.listen(port, () => {
+  console.log(`LISTENING ON PORT ${port}`);
 });
