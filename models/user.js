@@ -9,6 +9,10 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 userSchema.plugin(passportLocalMongoose);

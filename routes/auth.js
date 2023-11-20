@@ -26,4 +26,6 @@ authRouter
 
 authRouter.post("/logout", authController.logout);
 
+authRouter.get("/verifyemail", authController.verifyEmail);
+
 exports.authRouter = authRouter;

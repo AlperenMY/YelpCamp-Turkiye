@@ -1,4 +1,5 @@
 const { User } = require("../models/user");
+const { sendMail } = require("../utils/sendMail");
 
 exports.renderRegisterForm = (req, res) => {
   res.render("auth/register", { title: "Register" });
@@ -9,8 +10,9 @@ exports.register = async (req, res, next) => {
     const { username, email, password } = req.body;
     const user = new User({ username, email });
     const newUser = await User.register(user, password);
-    req.login(newUser, (err) => {
+    req.login(newUser, async (err) => {
       if (err) return next(err);
+      await sendMail(email, user._id, req.headers.host);
       req.flash("success", `Hey ${username} Welcome to Yelp-Camp Türkiye`);
       res.redirect("/campgrounds");
     });
@@ -36,4 +38,10 @@ exports.logout = (req, res, next) => {
     req.flash("success", "Logout successfully");
     res.redirect("/campgrounds");
   });
+};
+
+exports.verifyEmail = async (req, res) => {
+  const userId = req.query.token;
+  await User.findByIdAndUpdate(userId, { verified: true });
+  res.redirect("/campgrounds");
 };
