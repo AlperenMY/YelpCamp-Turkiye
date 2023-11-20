@@ -41,7 +41,13 @@ exports.logout = (req, res, next) => {
 };
 
 exports.verifyEmail = async (req, res) => {
-  const userId = req.query.token;
-  await User.findByIdAndUpdate(userId, { verified: true });
+  if (req.query.token) {
+    const userId = req.query.token;
+    await User.findByIdAndUpdate(userId, { verified: true });
+  } else {
+    const user = req.user;
+    await sendMail(user.email, user._id, req.headers.host);
+    req.flash("success", `Verification email is sent to ${user.email}`);
+  }
   res.redirect("/campgrounds");
 };

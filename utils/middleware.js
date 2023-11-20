@@ -23,8 +23,14 @@ exports.validateInput = (req, res, next) => {
 
 exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
-    req.flash("error", "You should log in first");
+    req.flash("error", "You have to log in first");
     return res.redirect("/login");
+  } else if (!req.user.verified) {
+    req.flash(
+      "error",
+      "You have to verify your email before this action. Click &nbsp<a href='/verifyemail'>here</a>&nbsp to verify email! "
+    );
+    return res.redirect("/campgrounds");
   }
   next();
 };
