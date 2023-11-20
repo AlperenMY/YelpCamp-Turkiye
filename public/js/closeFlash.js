@@ -1,4 +1,4 @@
-const alertList = document.querySelectorAll(".alert-dismissible");
+const alertList = document.querySelectorAll(".alert-success");
 const alerts = [...alertList].map((element) => new bootstrap.Alert(element));
 for (const alert of alerts) {
   setTimeout(() => {
