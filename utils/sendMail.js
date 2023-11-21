@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer");
 const config = {
   service: "gmail",
   host: "smtp.gmail.com",
-  port: 587,
+  port: 465, //587
   secure: false,
   auth: {
     user: "yelpcampturkiye@gmail.com",
@@ -23,6 +23,4 @@ exports.sendMail = async (to, token, hostname) => {
       verifyLink, // plain text body
     html: `<b>Welcome to YelpCamp Turkiye</b><p>Thank you for registering. You should verify your email in order to use YelpCamp Turkiye</p><a href="${verifyLink}">Verify Email</a>`, // html body
   });
-  console.log(info);
-  console.log(verifyLink);
 };
